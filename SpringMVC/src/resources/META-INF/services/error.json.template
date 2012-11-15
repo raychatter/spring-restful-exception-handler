@@ -1,0 +1,14 @@
+{
+   "code": %d,
+   "error": %s,
+   "description": %s
+}
+----------------
+<?xml version="1.0"?>
+<error>
+   <code>%d</code>
+   <description>%s</description>
+</error>
+----------------
+code: %d
+error: %s
