@@ -19,5 +19,4 @@ import java.lang.annotation.Target;
 public @interface ExceptionHandler {
    HttpStatus httpStatus() default HttpStatus.OK;
    String contentType();
-   String message() default "Oh shit!";
 }

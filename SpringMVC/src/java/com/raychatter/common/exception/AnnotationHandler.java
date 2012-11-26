@@ -1,16 +1,14 @@
 package com.raychatter.common.exception;
 
 import com.raychatter.common.annotation.ExceptionHandler;
-import com.raychatter.common.annotation.SupportedExceptions;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.InputStream;
+import java.util.Scanner;
 
 public class AnnotationHandler implements HandlerExceptionResolver {
 
@@ -26,36 +24,34 @@ public class AnnotationHandler implements HandlerExceptionResolver {
 //         handlerClass = router.getBeanType();
 //      }
 
-      final SupportedExceptions supportedExceptionsAnnotation = handler.getClass().getAnnotation(SupportedExceptions.class);
-      if (supportedExceptionsAnnotation == null) {
-         // TODO: test what you get in UI when you return here, also test what happens if you return 'null';
-         return new ModelAndView();
-      }
-
-      final Set<Class<? extends Throwable>> exceptions = new HashSet<Class<? extends Throwable>>();
-      Collections.addAll(exceptions, supportedExceptionsAnnotation.value());
-
-      if(exceptions.contains(thrownException.getClass())) {
-         return doStuffWithAnnotation(thrownException,response);
-      }
-
-      return doStuffWithAnnotation(thrownException,response);
-   }
-
-   private ModelAndView doStuffWithAnnotation(final Exception thrownException, final HttpServletResponse response) {
       final ExceptionHandler exceptionHandlerAnnotation = thrownException.getClass().getAnnotation(ExceptionHandler.class);
       if (exceptionHandlerAnnotation == null) {
          // TODO: test what you get in UI when you return here, also test what happens if you return 'null';
          return new ModelAndView();
       }
-      response.setStatus(exceptionHandlerAnnotation.httpStatus().value());
+
+      return doStuffWithAnnotation(exceptionHandlerAnnotation, thrownException, response);
+   }
+
+   private ModelAndView doStuffWithAnnotation(final ExceptionHandler exceptionHandlerAnnotation, final Exception thrownException, final HttpServletResponse response) {
+
       response.setContentType(exceptionHandlerAnnotation.contentType());
+      response.setStatus(exceptionHandlerAnnotation.httpStatus().value());
       try {
-         response.getWriter().write(String.format(exceptionHandlerAnnotation.message(), thrownException.getMessage()));
+         response.getWriter().write(formatMessage(thrownException));
       } catch (IOException e) {
          e.printStackTrace();
       }
       return new ModelAndView();
+   }
+
+   private String formatMessage(final Exception thrownException) {
+      return String.format(readTemplate(), thrownException.getMessage());
+   }
+
+   private String readTemplate() {
+      final InputStream templateFile = getClass().getResourceAsStream("/error.template");
+      return new Scanner(templateFile, "UTF-8").useDelimiter("\\A").next().trim();
    }
 
 }
