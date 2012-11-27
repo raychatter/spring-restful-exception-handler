@@ -18,15 +18,8 @@ public class AnnotationHandler implements HandlerExceptionResolver {
                                         final Object handler,
                                         final Exception thrownException) {
 
-//      Class<?> handlerClass = handler.getClass();
-//      if (handler instanceof org.springframework.web.method.HandlerMethod) {
-//         final HandlerMethod router = (HandlerMethod) handler;
-//         handlerClass = router.getBeanType();
-//      }
-
       final ExceptionHandler exceptionHandlerAnnotation = thrownException.getClass().getAnnotation(ExceptionHandler.class);
       if (exceptionHandlerAnnotation == null) {
-         // TODO: test what you get in UI when you return here, also test what happens if you return 'null';
          return new ModelAndView();
       }
 
@@ -45,10 +38,13 @@ public class AnnotationHandler implements HandlerExceptionResolver {
       return new ModelAndView();
    }
 
+//   Customize your output message here. If you have multiple dynamic parameters to
+//   put into your template, you can assign them all in this method.
    private String formatMessage(final Exception thrownException) {
       return String.format(readTemplate(), thrownException.getMessage());
    }
 
+   // Reads the template file until the end of the line
    private String readTemplate() {
       final InputStream templateFile = getClass().getResourceAsStream("/error.template");
       return new Scanner(templateFile, "UTF-8").useDelimiter("\\A").next().trim();

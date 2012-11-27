@@ -61,7 +61,7 @@
       <file leaf-file-name="ExceptionHandler.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/java/com/raychatter/common/annotation/ExceptionHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="0" selection-start="613" selection-end="613" vertical-scroll-proportion="0.0">
+            <state line="12" column="39" selection-start="361" selection-end="361" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -70,7 +70,7 @@
       <file leaf-file-name="HelloController.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/java/com/raychatter/common/controller/HelloController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="19" column="30" selection-start="731" selection-end="731" vertical-scroll-proportion="0.0">
+            <state line="18" column="26" selection-start="701" selection-end="701" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -79,40 +79,10 @@
       <file leaf-file-name="AnnotationHandler.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/java/com/raychatter/common/exception/AnnotationHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="45" column="22" selection-start="1949" selection-end="1949" vertical-scroll-proportion="0.9170507">
+            <state line="46" column="55" selection-start="1942" selection-end="1942" vertical-scroll-proportion="0.50230414">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="mvc-dispatcher-servlet.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/webapp/WEB-INF/mvc-dispatcher-servlet.xml">
-          <provider editor-type-id="com.intellij.spring.perspectives.SpringBeansStructureEditorProvider">
-            <state />
-          </provider>
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="22" column="69" selection-start="876" selection-end="876" vertical-scroll-proportion="-12.772727">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="web.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/webapp/WEB-INF/web.xml">
-          <provider editor-type-id="com.intellij.javaee.module.view.web.viewlets.WebModuleAssemblyDescriptorProvider">
-            <state />
-          </provider>
-          <provider editor-type-id="com.intellij.javaee.module.view.web.viewlets.WebModuleGeneralEditorProvider">
-            <state />
-          </provider>
-          <provider editor-type-id="com.intellij.javaee.module.view.web.viewlets.WebModuleAssemblyDescriptorReferencesProvider">
-            <state />
-          </provider>
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="19" selection-start="703" selection-end="703" vertical-scroll-proportion="-8.681818">
-              <folding />
             </state>
           </provider>
         </entry>
@@ -121,15 +91,6 @@
         <entry file="file://$PROJECT_DIR$/src/resources/error.template">
           <provider selected="true" editor-type-id="text-editor">
             <state line="0" column="14" selection-start="12" selection-end="14" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="error.json.template" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/resources/error.json.template">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="55" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -175,10 +136,10 @@
         <option value="$PROJECT_DIR$/src/java/com/raychatter/common/exception/error.template" />
         <option value="$PROJECT_DIR$/src/java/com/raychatter/common/exception/CustomException.java" />
         <option value="$PROJECT_DIR$/src/java/com/raychatter/common/annotation/ExceptionHandler.java" />
-        <option value="$PROJECT_DIR$/src/java/com/raychatter/common/exception/AnnotationHandler.java" />
-        <option value="$PROJECT_DIR$/src/java/com/raychatter/common/controller/HelloController.java" />
         <option value="$PROJECT_DIR$/src/resources/error.template" />
         <option value="$PROJECT_DIR$/src/java/com/raychatter/common/exception/MyNegativeArraySizeException.java" />
+        <option value="$PROJECT_DIR$/src/java/com/raychatter/common/controller/HelloController.java" />
+        <option value="$PROJECT_DIR$/src/java/com/raychatter/common/exception/AnnotationHandler.java" />
       </list>
     </option>
   </component>
@@ -792,11 +753,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/webapp/WEB-INF/pages/hello.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="13" selection-start="53" selection-end="53" vertical-scroll-proportion="0.088626295" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="6" column="28" selection-start="371" selection-end="371" vertical-scroll-proportion="0.042735044" />
@@ -823,56 +779,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/com/raychatter/common/controller/HelloController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="30" selection-start="731" selection-end="731" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/resources/error.json.template">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="55" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/com/raychatter/common/annotation/ExceptionHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="0" selection-start="613" selection-end="613" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/com/raychatter/common/exception/CustomException.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="63" selection-start="239" selection-end="250" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/com/raychatter/common/exception/MyNegativeArraySizeException.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="43" selection-start="276" selection-end="276" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/resources/error.template">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="14" selection-start="12" selection-end="14" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/webapp/WEB-INF/mvc-dispatcher-servlet.xml">
-      <provider editor-type-id="com.intellij.spring.perspectives.SpringBeansStructureEditorProvider">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="69" selection-start="876" selection-end="876" vertical-scroll-proportion="-12.772727">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/webapp/WEB-INF/web.xml">
       <provider editor-type-id="com.intellij.javaee.module.view.web.viewlets.WebModuleAssemblyDescriptorProvider">
         <state />
@@ -889,9 +795,61 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/java/com/raychatter/common/exception/CustomException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="63" selection-start="239" selection-end="250" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/webapp/WEB-INF/mvc-dispatcher-servlet.xml">
+      <provider editor-type-id="com.intellij.spring.perspectives.SpringBeansStructureEditorProvider">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="69" selection-start="876" selection-end="876" vertical-scroll-proportion="0.66117644">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/webapp/WEB-INF/pages/hello.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="13" selection-start="53" selection-end="53" vertical-scroll-proportion="0.12080537">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/java/com/raychatter/common/annotation/ExceptionHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="39" selection-start="361" selection-end="361" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/java/com/raychatter/common/controller/HelloController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="26" selection-start="701" selection-end="701" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/resources/error.template">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="14" selection-start="12" selection-end="14" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/java/com/raychatter/common/exception/MyNegativeArraySizeException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="43" selection-start="276" selection-end="276" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/java/com/raychatter/common/exception/AnnotationHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="22" selection-start="1949" selection-end="1949" vertical-scroll-proportion="0.9170507">
+        <state line="46" column="55" selection-start="1942" selection-end="1942" vertical-scroll-proportion="0.50230414">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
