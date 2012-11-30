@@ -1,6 +1,7 @@
 package com.raychatter.common.annotation;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -17,6 +18,6 @@ import java.lang.annotation.Target;
       ElementType.PARAMETER,
       ElementType.TYPE})
 public @interface ExceptionHandler {
-   HttpStatus httpStatus() default HttpStatus.OK;
-   String contentType();
+   HttpStatus httpStatus() default HttpStatus.INTERNAL_SERVER_ERROR;
+   String contentType() default MediaType.TEXT_PLAIN_VALUE;
 }

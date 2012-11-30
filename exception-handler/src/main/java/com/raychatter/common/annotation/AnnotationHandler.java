@@ -1,8 +1,6 @@
 package com.raychatter.common.annotation;
 
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -14,35 +12,39 @@ import java.util.Scanner;
 
 public class AnnotationHandler implements HandlerExceptionResolver {
 
+   protected static final String DEFAULT_ERROR_STRING = "Error: %s";
+   protected static final String USER_TEMPLATE = "error.template";
+   protected static final String DEFAULT_TEMPLATE = "defaults/default.template";
+   private static final String UTF_8 = "UTF-8";
+
    @Override
    public ModelAndView resolveException(final HttpServletRequest request, final HttpServletResponse response, final Object handler, final Exception thrownException) {
       final ExceptionHandler annotation = thrownException.getClass().getAnnotation(ExceptionHandler.class);
 
-//    This still returns an empty ModelAndView
       if (annotation == null) {
          return new ModelAndView();
       }
 
-      return doStuffWithAnnotation(annotation, thrownException, response);
+      return handleException(annotation, thrownException, response);
    }
 
-   private ModelAndView doStuffWithAnnotation(final ExceptionHandler exceptionHandlerAnnotation, final Exception thrownException, final HttpServletResponse response) {
-
-//    This is only outside of the try because the null annotation case is handled in resolveException
-      response.setContentType(exceptionHandlerAnnotation.contentType());
-      response.setStatus(exceptionHandlerAnnotation.httpStatus().value());
+   protected ModelAndView handleException(final ExceptionHandler annotation, final Exception thrownException, final HttpServletResponse response) {
+      response.setContentType(annotation.contentType());
+      response.setStatus(annotation.httpStatus().value());
 
       try {
-         response.getWriter().write(formatMessage(thrownException));
+         final String message = formatMessage(thrownException);
+         response.getWriter().write(message);
       } catch (IOException e) {
-         response.setContentType(MediaType.APPLICATION_XML_VALUE);
-         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-
-         try {
-            response.getWriter().write(formatDefaultMessage(thrownException));
-         } catch (IOException ex) {
-            ex.printStackTrace();
-         }
+         //TODO: Potentially this can be handled differently than the template errors
+//         response.setContentType(MediaType.APPLICATION_XML_VALUE);
+//         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+//
+//         try {
+//            response.getWriter().write(formatDefaultMessage(thrownException));
+//         } catch (IOException ex) {
+//            ex.printStackTrace();
+//         }
       }
 
       return new ModelAndView();
@@ -57,22 +59,21 @@ public class AnnotationHandler implements HandlerExceptionResolver {
    }
 
    protected String readTemplate() throws IOException {
-      final InputStream templateFile = new ClassPathResource("error.template").getInputStream();
-      return new Scanner(templateFile, "UTF-8").useDelimiter("\\A").next().trim();
+      final InputStream templateFile = getResource(USER_TEMPLATE);
+      return new Scanner(templateFile, UTF_8).useDelimiter("\\A").next().trim();
    }
 
-// Extract into a new protected method to grab input stream; spy that new method, returning null?
    protected String readDefaultTemplate() {
       try {
-         final InputStream templateFile = getInputStream("defaults/default.template");
-         return new Scanner(templateFile, "UTF-8").useDelimiter("\\A").next().trim();
+         final InputStream templateFile = getResource(DEFAULT_TEMPLATE);
+         return new Scanner(templateFile, UTF_8).useDelimiter("\\A").next().trim();
       } catch (IOException ex) {
-         return "Error: %s";
+         return DEFAULT_ERROR_STRING;
       }
    }
 
-   protected InputStream getInputStream(String filepath) throws IOException {
-      return new ClassPathResource(filepath).getInputStream();
+   protected InputStream getResource(final String resource) throws IOException {
+      return new ClassPathResource(resource).getInputStream();
    }
 
 }
