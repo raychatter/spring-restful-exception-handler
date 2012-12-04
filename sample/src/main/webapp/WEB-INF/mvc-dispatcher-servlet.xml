@@ -20,6 +20,6 @@
 		</property>
 	</bean>
 
-   <bean id="exceptionResolver" class="com.raychatter.common.exception.AnnotationHandler" />
+   <bean id="exceptionResolver" class="com.raychatter.common.annotation.AnnotationHandler" />
 
 </beans>

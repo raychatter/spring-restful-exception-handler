@@ -4,6 +4,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
@@ -12,12 +13,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class AnnotationHandlerTest {
 
@@ -93,7 +89,8 @@ public class AnnotationHandlerTest {
       Assert.assertEquals(expectedDefaultTemplateString, actual);
    }
 
-   @Test public void handleException_ShouldRenderDefaultContentType_WhenNoAnnotationAttributesGiven() throws Exception {
+   @Test
+   public void handleException_ShouldRenderDefaultContentType_WhenNoAnnotationAttributesGiven() throws Exception {
       final String emptyString = "";
 
       final HttpServletResponse mockResponse = mock(HttpServletResponse.class);
@@ -106,10 +103,11 @@ public class AnnotationHandlerTest {
 
       sut.handleException(TestExceptionWithNoAnnotationAttributes.class.getAnnotation(ExceptionHandler.class), null, mockResponse);
 
-      verify(mockResponse).setContentType(MediaType.TEXT_PLAIN_VALUE);
+      verify(mockResponse).setContentType(MediaType.APPLICATION_XML_VALUE);
    }
 
-   @Test public void handleException_ShouldRenderDefaultHttpStatusCode_WhenNoAnnotationAttributesGiven() throws Exception {
+   @Test
+   public void handleException_ShouldRenderDefaultHttpStatusCode_WhenNoAnnotationAttributesGiven() throws Exception {
       final String emptyString = "";
 
       final HttpServletResponse mockResponse = mock(HttpServletResponse.class);
@@ -125,7 +123,8 @@ public class AnnotationHandlerTest {
       verify(mockResponse).setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
    }
 
-   @Test public void handleException_ShouldRenderNotFoundHttpStatusCode_WhenNotFoundAnnotationAttributeIsGiven() throws Exception {
+   @Test
+   public void handleException_ShouldRenderNotFoundHttpStatusCode_WhenNotFoundAnnotationAttributeIsGiven() throws Exception {
       final String emptyString = "";
 
       final HttpServletResponse mockResponse = mock(HttpServletResponse.class);
@@ -141,7 +140,8 @@ public class AnnotationHandlerTest {
       verify(mockResponse).setStatus(HttpStatus.NOT_FOUND.value());
    }
 
-   @Test public void handleException_ShouldRenderXmlContentType_WhenXmlContentTypeAnnotationAttributeIsGiven() throws Exception {
+   @Test
+   public void handleException_ShouldRenderXmlContentType_WhenXmlContentTypeAnnotationAttributeIsGiven() throws Exception {
       final String emptyString = "";
 
       final HttpServletResponse mockResponse = mock(HttpServletResponse.class);
@@ -157,7 +157,8 @@ public class AnnotationHandlerTest {
       verify(mockResponse).setContentType(MediaType.APPLICATION_XML_VALUE);
    }
 
-   @Test public void handleException_ShouldRenderUserMessage_WhenUserTemplateIsGiven() throws Exception {
+   @Test
+   public void handleException_ShouldRenderUserMessage_WhenUserTemplateIsGiven() throws Exception {
       final String expectedUserTemplate = "USER TEMPLATE: %s";
       final String expectedErrorMessage = "ERROR MESSAGE";
       final String expectedErrorBody = "USER TEMPLATE: ERROR MESSAGE";
@@ -175,6 +176,70 @@ public class AnnotationHandlerTest {
       verify(mockPrinter).write(expectedErrorBody);
    }
 
+   @Test
+   public void handleException_ShouldReturnXmlContentType_WhenNoUserTemplateGiven() throws Exception {
+      final String emptyString = "";
+      final HttpServletResponse mockResponse = mock(HttpServletResponse.class);
+      final PrintWriter mockPrinter = mock(PrintWriter.class);
+      when(mockResponse.getWriter()).thenReturn(mockPrinter);
+
+      final AnnotationHandler sut = spy(new AnnotationHandler());
+      doThrow(IOException.class).when(sut).getResource(AnnotationHandler.USER_TEMPLATE);
+      doReturn(emptyString).when(sut).formatDefaultMessage(null);
+
+      sut.handleException(TestExceptionWithNoContentStatusCodeAndTextContentType.class.getAnnotation(ExceptionHandler.class), null, mockResponse);
+
+      verify(mockResponse).setContentType(MediaType.APPLICATION_XML_VALUE);
+   }
+
+   @Test
+   public void handleException_ShouldReturnInternalServerErrorStatusCode_WhenNoUserTemplateGiven() throws Exception {
+      final String emptyString = "";
+      final HttpServletResponse mockResponse = mock(HttpServletResponse.class);
+      final PrintWriter mockPrinter = mock(PrintWriter.class);
+      when(mockResponse.getWriter()).thenReturn(mockPrinter);
+
+      final AnnotationHandler sut = spy(new AnnotationHandler());
+      doThrow(IOException.class).when(sut).getResource(AnnotationHandler.USER_TEMPLATE);
+      doReturn(emptyString).when(sut).formatDefaultMessage(null);
+
+      sut.handleException(TestExceptionWithNoContentStatusCodeAndTextContentType.class.getAnnotation(ExceptionHandler.class), null, mockResponse);
+
+      verify(mockResponse).setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+   }
+
+   @Test
+   public void handleException_ShouldRenderDefaultTemplate_WhenNoUserTemplateGiven() throws Exception {
+      final String expectedDefaultTemplate = "DEFAULT TEMPLATE: %s";
+      final String expectedErrorMessage = "ERROR MESSAGE";
+      final String expectedErrorBody = "DEFAULT TEMPLATE: ERROR MESSAGE";
+      final TestExceptionWithNoContentStatusCodeAndTextContentType expectedException = new TestExceptionWithNoContentStatusCodeAndTextContentType(expectedErrorMessage);
+      final HttpServletResponse mockResponse = mock(HttpServletResponse.class);
+      final PrintWriter mockPrinter = mock(PrintWriter.class);
+      when(mockResponse.getWriter()).thenReturn(mockPrinter);
+
+      final AnnotationHandler sut = spy(new AnnotationHandler());
+      doThrow(IOException.class).when(sut).getResource(AnnotationHandler.USER_TEMPLATE);
+      doReturn(new ByteArrayInputStream(expectedDefaultTemplate.getBytes())).when(sut).getResource(AnnotationHandler.DEFAULT_TEMPLATE);
+
+      sut.handleException(expectedException.getClass().getAnnotation(ExceptionHandler.class), expectedException, mockResponse);
+
+      verify(mockPrinter).write(expectedErrorBody);
+   }
+
+   @Test public void resolveException_ShouldReturnCustomErrorMessage_WhenValidExceptionWithAnnotationIsGiven() throws Exception {
+      final ExceptionHandler mockAnnotation = mock(ExceptionHandler.class);
+      final HttpServletResponse mockResponse = mock(HttpServletResponse.class);
+      final TestExceptionWithNoAnnotationAttributes expectedException = new TestExceptionWithNoAnnotationAttributes("");
+
+      final AnnotationHandler sut = spy(new AnnotationHandler());
+      doReturn(new ModelAndView()).when(sut).handleException(mockAnnotation, expectedException, mockResponse);
+      doReturn(mockAnnotation).when(sut).getAnnotationFrom(expectedException);
+
+      final ModelAndView view = sut.resolveException(null, mockResponse, null, expectedException);
+
+      verify(sut).handleException(mockAnnotation, expectedException, mockResponse);
+   }
 }
 
 @ExceptionHandler()
@@ -185,8 +250,17 @@ class TestExceptionWithNoAnnotationAttributes extends Exception {
 }
 
 @ExceptionHandler(contentType = MediaType.APPLICATION_XML_VALUE)
-class TestExceptionWithXmlContentType extends Exception { }
+class TestExceptionWithXmlContentType extends Exception {
+}
 
 @ExceptionHandler(httpStatus = HttpStatus.NOT_FOUND)
-class TestExceptionWithNotFoundStatusCode extends Exception { }
+class TestExceptionWithNotFoundStatusCode extends Exception {
+}
+
+@ExceptionHandler(contentType = MediaType.TEXT_PLAIN_VALUE, httpStatus = HttpStatus.NO_CONTENT)
+class TestExceptionWithNoContentStatusCodeAndTextContentType extends Exception {
+   public TestExceptionWithNoContentStatusCodeAndTextContentType(final String s) {
+      super(s);
+   }
+}
 

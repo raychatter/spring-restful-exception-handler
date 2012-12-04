@@ -1,6 +1,8 @@
 package com.raychatter.common.annotation;
 
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -12,23 +14,28 @@ import java.util.Scanner;
 
 public class AnnotationHandler implements HandlerExceptionResolver {
 
-   protected static final String DEFAULT_ERROR_STRING = "Error: %s";
+   protected static final String DEFAULT_ERROR_STRING = "<error>%s</error>";
    protected static final String USER_TEMPLATE = "error.template";
    protected static final String DEFAULT_TEMPLATE = "defaults/default.template";
    private static final String UTF_8 = "UTF-8";
 
    @Override
    public ModelAndView resolveException(final HttpServletRequest request, final HttpServletResponse response, final Object handler, final Exception thrownException) {
-      final ExceptionHandler annotation = thrownException.getClass().getAnnotation(ExceptionHandler.class);
+      final ExceptionHandler annotation = getAnnotationFrom(thrownException);
 
-      if (annotation == null) {
-         return new ModelAndView();
+      if (annotation == null) return new ModelAndView();
+
+      try {
+         return handleException(annotation, thrownException, response);
+      } catch (IOException e) {
+         // potentially something went wrong in response itself
+         e.printStackTrace();
       }
 
-      return handleException(annotation, thrownException, response);
+      return new ModelAndView();
    }
 
-   protected ModelAndView handleException(final ExceptionHandler annotation, final Exception thrownException, final HttpServletResponse response) {
+   protected ModelAndView handleException(final ExceptionHandler annotation, final Exception thrownException, final HttpServletResponse response) throws IOException {
       response.setContentType(annotation.contentType());
       response.setStatus(annotation.httpStatus().value());
 
@@ -36,18 +43,16 @@ public class AnnotationHandler implements HandlerExceptionResolver {
          final String message = formatMessage(thrownException);
          response.getWriter().write(message);
       } catch (IOException e) {
-         //TODO: Potentially this can be handled differently than the template errors
-//         response.setContentType(MediaType.APPLICATION_XML_VALUE);
-//         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-//
-//         try {
-//            response.getWriter().write(formatDefaultMessage(thrownException));
-//         } catch (IOException ex) {
-//            ex.printStackTrace();
-//         }
+         response.setContentType(MediaType.APPLICATION_XML_VALUE);
+         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+         response.getWriter().write(formatDefaultMessage(thrownException));
       }
 
       return new ModelAndView();
+   }
+
+   protected ExceptionHandler getAnnotationFrom(Exception thrownException) {
+      return thrownException.getClass().getAnnotation(ExceptionHandler.class);
    }
 
    protected String formatMessage(final Exception thrownException) throws IOException {
