@@ -12,7 +12,8 @@ Under PROJECT/resources create a file called *error.template*. Inside this file,
 Annotate the custom exception class with `@Exception(*httpStatus*, *contentType*)`.
 The defaults are
 `httpStatus = HttpStatus.INTERNAL_SERVER_ERROR`
-`contentType = MediaType.APPLICATION_XML_VALUE`
+`contentType = MediaType.APPLICATION_XML_VALUE`.
+
 Make sure to add `com.raychatter.common.annotation.AnnotationHandler` as a bean in your XML.
 And that's it!
 
