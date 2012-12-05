@@ -12,6 +12,7 @@ The defaults are `httpStatus = HttpStatus.INTERNAL_SERVER_ERROR` and `contentTyp
 The custom message is taken from the custom annotation class itself, so any parameters you'd like to insert need to be handled there.
 
 Make sure to add `com.raychatter.common.annotation.AnnotationHandler` as a bean in your XML.
+
 And that's it!
 
 
