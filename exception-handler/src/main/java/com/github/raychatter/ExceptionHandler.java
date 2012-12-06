@@ -1,4 +1,4 @@
-package com.raychatter.common.annotation;
+package com.github.raychatter;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

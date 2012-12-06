@@ -1,6 +1,6 @@
-package com.raychatter.common.exception;
+package com.github.raychatter.common.exception;
 
-import com.raychatter.common.annotation.ExceptionHandler;
+import com.github.raychatter.ExceptionHandler;
 import org.springframework.http.HttpStatus;
 
 @ExceptionHandler(httpStatus = HttpStatus.NOT_FOUND, contentType = "text/html")

@@ -8,7 +8,7 @@
         http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
    <context:annotation-config />
-	<context:component-scan base-package="com.raychatter.common.controller" />
+	<context:component-scan base-package="com.github.raychatter.common.controller" />
 
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -20,6 +20,6 @@
 		</property>
 	</bean>
 
-   <bean id="exceptionResolver" class="com.raychatter.common.annotation.AnnotationHandler" />
+   <bean id="exceptionResolver" class="com.github.raychatter.AnnotationHandler" />
 
 </beans>

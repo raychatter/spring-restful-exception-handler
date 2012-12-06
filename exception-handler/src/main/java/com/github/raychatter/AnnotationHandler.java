@@ -1,4 +1,4 @@
-package com.raychatter.common.annotation;
+package com.github.raychatter;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;

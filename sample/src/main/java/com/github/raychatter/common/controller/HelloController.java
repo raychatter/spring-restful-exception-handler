@@ -1,7 +1,7 @@
-package com.raychatter.common.controller;
+package com.github.raychatter.common.controller;
 
-import com.raychatter.common.exception.MyNegativeArraySizeException;
-import com.raychatter.common.exception.CustomException;
+import com.github.raychatter.common.exception.MyNegativeArraySizeException;
+import com.github.raychatter.common.exception.CustomException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

@@ -1,4 +1,4 @@
-package com.raychatter.common.annotation;
+package com.github.raychatter;
 
 import junit.framework.Assert;
 import org.junit.Test;
