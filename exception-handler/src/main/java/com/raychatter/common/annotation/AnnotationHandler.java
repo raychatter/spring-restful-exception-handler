@@ -23,9 +23,12 @@ public class AnnotationHandler implements HandlerExceptionResolver {
    public ModelAndView resolveException(final HttpServletRequest request, final HttpServletResponse response, final Object handler, final Exception thrownException) {
       final ExceptionHandler annotation = getAnnotationFrom(thrownException);
 
-      if (annotation == null) return new ModelAndView();
-
       try {
+         if (annotation == null) {
+            thrownException.printStackTrace();
+            return respondWithDefault(thrownException, response);
+         }
+
          return handleException(annotation, thrownException, response);
       } catch (IOException e) {
          // potentially something went wrong in response itself
@@ -43,10 +46,16 @@ public class AnnotationHandler implements HandlerExceptionResolver {
          final String message = formatMessage(thrownException);
          response.getWriter().write(message);
       } catch (IOException e) {
-         response.setContentType(MediaType.APPLICATION_XML_VALUE);
-         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-         response.getWriter().write(formatDefaultMessage(thrownException));
+         return respondWithDefault(thrownException, response);
       }
+
+      return new ModelAndView();
+   }
+
+   private ModelAndView respondWithDefault(final Exception thrownException, final HttpServletResponse response) throws IOException {
+      response.setContentType(MediaType.APPLICATION_XML_VALUE);
+      response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+      response.getWriter().write(formatDefaultMessage(thrownException));
 
       return new ModelAndView();
    }
