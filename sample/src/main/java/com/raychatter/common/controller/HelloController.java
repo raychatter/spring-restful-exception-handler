@@ -29,4 +29,10 @@ public class HelloController {
       throw new MyNegativeArraySizeException("oops");
 	}
 
+   @RequestMapping(value = "/unchecked", method = RequestMethod.GET)
+   @ResponseBody
+	public Object unchecked() throws Exception {
+      throw new NullPointerException("an npe");
+	}
+
 }
