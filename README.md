@@ -36,6 +36,7 @@ And that's it! Just keep in mind that the exception handler will take care of al
 {
    "message": "%s"
 }
+```
 
 And now you need to make sure that your exceptions are returning `json` content type.
 
