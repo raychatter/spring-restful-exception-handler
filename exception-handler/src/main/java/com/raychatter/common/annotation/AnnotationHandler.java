@@ -52,7 +52,7 @@ public class AnnotationHandler implements HandlerExceptionResolver {
       return new ModelAndView();
    }
 
-   private ModelAndView respondWithDefault(final Exception thrownException, final HttpServletResponse response) throws IOException {
+   protected ModelAndView respondWithDefault(final Exception thrownException, final HttpServletResponse response) throws IOException {
       response.setContentType(MediaType.APPLICATION_XML_VALUE);
       response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
       response.getWriter().write(formatDefaultMessage(thrownException));
