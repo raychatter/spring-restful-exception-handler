@@ -240,6 +240,21 @@ public class AnnotationHandlerTest {
 
       verify(sut).handleException(mockAnnotation, expectedException, mockResponse);
    }
+
+   @Test public void resolveException_ShouldReturnDefaultErrorMessage_WhenUncheckedExceptionIsGiven() throws Exception {
+      final NullPointerException expectedException = mock(NullPointerException.class);
+
+      final HttpServletResponse mockResponse = mock(HttpServletResponse.class);
+      final PrintWriter mockPrinter = mock(PrintWriter.class);
+      when(mockResponse.getWriter()).thenReturn(mockPrinter);
+
+      final AnnotationHandler sut = spy(new AnnotationHandler());
+      doReturn(null).when(sut).getAnnotationFrom(expectedException);
+
+      final ModelAndView view = sut.resolveException(null, mockResponse, null, expectedException);
+
+      verify(sut).respondWithDefault(expectedException, mockResponse);
+   }
 }
 
 @ExceptionHandler()
