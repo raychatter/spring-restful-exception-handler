@@ -4,7 +4,7 @@
    <groupId>com.github.raychatter</groupId>
    <artifactId>spring-restful-exception-handler-parent</artifactId>
    <packaging>pom</packaging>
-   <version>1.0</version>
+   <version>1.0-SNAPSHOT</version>
    <name>Spring Restful Exception Handler</name>
    <parent>
       <groupId>org.sonatype.oss</groupId>
