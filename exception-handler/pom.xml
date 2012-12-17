@@ -4,14 +4,14 @@
    <groupId>com.github.raychatter</groupId>
    <artifactId>spring-restful-exception-handler</artifactId>
    <packaging>jar</packaging>
-   <version>1.0.1</version>
+   <version>1.0.2-SNAPSHOT</version>
    <name>spring-restful-exception-handler</name>
    <description>Custom exception handler annotation for Spring to unify the error handling.</description>
    <url>https://github.com/raychatter/spring-restful-exception-handler</url>
    <parent>
       <groupId>com.github.raychatter</groupId>
       <artifactId>spring-restful-exception-handler-parent</artifactId>
-      <version>1.0.1</version>
+      <version>1.0.2-SNAPSHOT</version>
    </parent>
    <organization>
       <name>ThoughtWorks</name>
