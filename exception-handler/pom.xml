@@ -234,11 +234,11 @@
                   <configuration>
                      <target>
                         <delete>
-                           <fileset dir="${project.basedir}/artifacts" includes="*.${project.packaging}"/>
+                           <fileset dir="${project.basedir}/artifacts" includes="*.${project.packaging}" />
                         </delete>
                         <copy todir="${project.basedir}/artifacts">
                            <fileset dir="${project.build.directory}">
-                              <include name="${project.build.finalName}*.${project.packaging}"/>
+                              <include name="${project.build.finalName}*.${project.packaging}" />
                            </fileset>
                         </copy>
                      </target>
