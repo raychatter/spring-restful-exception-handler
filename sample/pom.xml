@@ -4,13 +4,13 @@
    <groupId>com.github.raychatter</groupId>
    <artifactId>sample</artifactId>
    <packaging>war</packaging>
-   <version>1.0-SNAPSHOT</version>
+   <version>1.0.1</version>
    <name>A demo app that shows custom exception handling</name>
    <url>https://github.com/raychatter/spring-restful-exception-handler</url>
    <parent>
       <groupId>com.github.raychatter</groupId>
       <artifactId>spring-restful-exception-handler-parent</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <version>1.0.1</version>
    </parent>
    <properties>
       <spring.version>3.1.1.RELEASE</spring.version>
@@ -70,7 +70,7 @@
       <dependency>
          <groupId>com.github.raychatter</groupId>
          <artifactId>spring-restful-exception-handler</artifactId>
-         <version>1.0-SNAPSHOT</version>
+         <version>1.0.1</version>
       </dependency>
    </dependencies>
    <build>
