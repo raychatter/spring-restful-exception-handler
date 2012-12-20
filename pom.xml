@@ -94,9 +94,6 @@
                   <goals>
                      <goal>jar</goal>
                   </goals>
-                  <configuration>
-                     <classifier>no-dependencies</classifier>
-                  </configuration>
                </execution>
             </executions>
             <configuration>
@@ -178,34 +175,6 @@
                            <Implementation-Version>${project.version}</Implementation-Version>
                         </manifestEntries>
                      </archive>
-                  </configuration>
-               </execution>
-            </executions>
-         </plugin>
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-shade-plugin</artifactId>
-            <version>1.7</version>
-            <executions>
-               <execution>
-                  <phase>package</phase>
-                  <goals>
-                     <goal>shade</goal>
-                  </goals>
-                  <configuration>
-                     <filters>
-                        <filter>
-                           <artifact>org.eclipse.jetty.orbit:javax.servlet</artifact>
-                           <excludes>
-                              <exclude>META-INF/ECLIPSE.SF</exclude>
-                              <exclude>META-INF/ECLIPSE.RSA</exclude>
-                              <exclude>META-INF/ECLIPSEF.SF</exclude>
-                              <exclude>META-INF/ECLIPSEF.RSA</exclude>
-                              <exclude>META-INF/ECLIPSE.INF</exclude>
-                              <exclude>META-INF/eclipse.inf</exclude>
-                           </excludes>
-                        </filter>
-                     </filters>
                   </configuration>
                </execution>
             </executions>
