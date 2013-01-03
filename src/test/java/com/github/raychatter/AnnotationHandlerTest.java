@@ -13,7 +13,12 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class AnnotationHandlerTest {
 
@@ -234,6 +239,7 @@ public class AnnotationHandlerTest {
 
       final AnnotationHandler sut = spy(new AnnotationHandler());
       doReturn(new ModelAndView()).when(sut).handleException(mockAnnotation, expectedException, mockResponse);
+      doReturn(expectedException).when(sut).getRootException(expectedException, expectedException.getCause());
       doReturn(mockAnnotation).when(sut).getAnnotationFrom(expectedException);
 
       final ModelAndView view = sut.resolveException(null, mockResponse, null, expectedException);
@@ -249,11 +255,35 @@ public class AnnotationHandlerTest {
       when(mockResponse.getWriter()).thenReturn(mockPrinter);
 
       final AnnotationHandler sut = spy(new AnnotationHandler());
-      doReturn(null).when(sut).getAnnotationFrom(expectedException);
+      when(sut.getRootException(expectedException, expectedException.getCause())).thenReturn(expectedException);
+      when(sut.getAnnotationFrom(expectedException)).thenReturn(null);
 
       final ModelAndView view = sut.resolveException(null, mockResponse, null, expectedException);
 
       verify(sut).respondWithDefault(expectedException, mockResponse);
+   }
+
+   // TODO: Mock the getCause() method to return TestExceptionWithNoAnnotation
+   // Instead of the actual exception, use the getCause() mocked one
+   // To pass into the annotationHandler method
+   // Check that the response is the correct message
+   @Test public void resolveException_ShouldReturnRootCheckedExceptionErrorMessage_WhenThereAreCheckedExceptionsChained() throws Exception {
+      TestExceptionWithNoAnnotationAttributes mockException = mock(TestExceptionWithNoAnnotationAttributes.class);
+      TestExceptionWithNoContentStatusCodeAndTextContentType mockCauseException = mock(TestExceptionWithNoContentStatusCodeAndTextContentType.class);
+      doReturn(mockCauseException).when(mockException).getCause();
+      doReturn(new TestExceptionWithNoAnnotation("")).when(mockCauseException).getCause();
+
+      final ExceptionHandler mockAnnotation = mock(ExceptionHandler.class);
+      final HttpServletResponse mockResponse = mock(HttpServletResponse.class);
+
+      final AnnotationHandler sut = spy(new AnnotationHandler());
+      when(sut.getAnnotationFrom(mockCauseException)).thenReturn(mockAnnotation);
+      when(sut.getRootException(mockException, mockException.getCause())).thenReturn(mockCauseException);
+      doReturn(new ModelAndView()).when(sut).handleException(mockAnnotation, mockCauseException, mockResponse);
+
+      final ModelAndView view = sut.resolveException(null, mockResponse, null, mockException);
+
+      verify(sut).handleException(mockAnnotation, mockCauseException, mockResponse);   //TestExceptionWithNoContentStatusCodeAndTextContentType
    }
 }
 
@@ -277,5 +307,14 @@ class TestExceptionWithNoContentStatusCodeAndTextContentType extends Exception {
    public TestExceptionWithNoContentStatusCodeAndTextContentType(final String s) {
       super(s);
    }
+
+   public TestExceptionWithNoContentStatusCodeAndTextContentType(final String s, Throwable ex) {
+      super(s,ex);
+   }
 }
 
+class TestExceptionWithNoAnnotation extends Exception {
+   public TestExceptionWithNoAnnotation(final String s) {
+      super(s);
+   }
+}

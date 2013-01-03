@@ -19,24 +19,24 @@ public class AnnotationHandler implements HandlerExceptionResolver {
    protected static final String DEFAULT_TEMPLATE = "defaults/default.template";
    private static final String UTF_8 = "UTF-8";
 
-   //TODO: When there's a wrapper exception leave it unannotated… call the e.getCause() method… until there is an annotated exception or if there are no more causes (e.geCause()==null)??.
-   /* If the exception thrown is annotated, use the message from that
-    * If it is not annotated, call getCause() until you reach the innermost annotated exception. Use that message.
-    * If getCause()==null, return the default message and response code
+   //TODO: When there's a wrapper exception leave it unannotated… call the e.getCause() method… until there is an annotated exception or if there are no more causes (e.geCause()==null)??
+   /* [ ] If the exception thrown is annotated, use the message from that
+    * [x] If it is not annotated, call getCause() until you reach the innermost annotated exception. Use that message.
+    * [ ] If getCause()==null, return the default message and response code
     */
    @Override
    public ModelAndView resolveException(final HttpServletRequest request, final HttpServletResponse response, final Object handler, final Exception thrownException) {
-      final ExceptionHandler annotation = getAnnotationFrom(thrownException);
+      Exception rootException = getRootException(thrownException, thrownException.getCause());
+      final ExceptionHandler annotation = getAnnotationFrom(rootException);
 
       try {
          if (annotation == null) {
-            thrownException.printStackTrace();
-            return respondWithDefault(thrownException, response);
+            rootException.printStackTrace();
+            return respondWithDefault(rootException, response);
          }
-
-         return handleException(annotation, thrownException, response);
+         return handleException(annotation, rootException, response);
       } catch (IOException e) {
-         // potentially something went wrong in response itself
+         // potentially something went wrong in the response itself
          e.printStackTrace();
       }
 
@@ -65,8 +65,16 @@ public class AnnotationHandler implements HandlerExceptionResolver {
       return new ModelAndView();
    }
 
-   protected ExceptionHandler getAnnotationFrom(Exception thrownException) {
-      return thrownException.getClass().getAnnotation(ExceptionHandler.class);
+   protected Exception getRootException(Exception thrownException, Throwable causedException) {
+      if(causedException == null || getAnnotationFrom((Exception)causedException)==null) {
+         return thrownException;
+      } else {
+         return getRootException((Exception) causedException, causedException.getCause());
+      }
+   }
+
+   protected ExceptionHandler getAnnotationFrom(Exception exception) {
+      return exception.getClass().getAnnotation(ExceptionHandler.class);
    }
 
    protected String formatMessage(final Exception thrownException) throws IOException {
