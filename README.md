@@ -48,4 +48,5 @@ public class MyCustomException extends Exception {
 ```
 
  ### Note:
+
  If an unannotated exception is thrown, the spring-restful-exception-handler will call `getCause()` until the first annotated exception is found. Provided there is no annotated exception, the default httpStatus and contentType will be used.
