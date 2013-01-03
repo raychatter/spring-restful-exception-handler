@@ -20,13 +20,13 @@ public class AnnotationHandler implements HandlerExceptionResolver {
    private static final String UTF_8 = "UTF-8";
 
    //TODO: When there's a wrapper exception leave it unannotated… call the e.getCause() method… until there is an annotated exception or if there are no more causes (e.geCause()==null)??
-   /* [ ] If the exception thrown is annotated, use the message from that
-    * [x] If it is not annotated, call getCause() until you reach the innermost annotated exception. Use that message.
+   /* [x] If the exception thrown is annotated, use the message from that
+    * [x] If it is not annotated, call getCause() until you reach an annotated exception. Use that message.
     * [ ] If getCause()==null, return the default message and response code
     */
    @Override
    public ModelAndView resolveException(final HttpServletRequest request, final HttpServletResponse response, final Object handler, final Exception thrownException) {
-      Exception rootException = getRootException(thrownException, thrownException.getCause());
+      Exception rootException = getAnnotatedException(thrownException, thrownException.getCause());
       final ExceptionHandler annotation = getAnnotationFrom(rootException);
 
       try {
@@ -65,11 +65,11 @@ public class AnnotationHandler implements HandlerExceptionResolver {
       return new ModelAndView();
    }
 
-   protected Exception getRootException(Exception thrownException, Throwable causedException) {
-      if(causedException == null || getAnnotationFrom((Exception)causedException)==null) {
+   protected Exception getAnnotatedException(Exception thrownException, Throwable causedException) {
+      if(getAnnotationFrom(thrownException) != null || causedException == null) {
          return thrownException;
       } else {
-         return getRootException((Exception) causedException, causedException.getCause());
+         return getAnnotatedException((Exception) causedException, causedException.getCause());
       }
    }
 
