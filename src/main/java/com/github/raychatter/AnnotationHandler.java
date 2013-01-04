@@ -19,11 +19,6 @@ public class AnnotationHandler implements HandlerExceptionResolver {
    protected static final String DEFAULT_TEMPLATE = "defaults/default.template";
    private static final String UTF_8 = "UTF-8";
 
-   //TODO: When there's a wrapper exception leave it unannotated… call the e.getCause() method… until there is an annotated exception or if there are no more causes (e.geCause()==null)??
-   /* [x] If the exception thrown is annotated, use the message from that
-    * [x] If it is not annotated, call getCause() until you reach an annotated exception. Use that message.
-    * [ ] If getCause()==null, return the default message and response code
-    */
    @Override
    public ModelAndView resolveException(final HttpServletRequest request, final HttpServletResponse response, final Object handler, final Exception thrownException) {
       Exception rootException = getAnnotatedException(thrownException, thrownException.getCause());
