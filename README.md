@@ -67,3 +67,5 @@ public class MyCustomException extends Exception {
    }
 }
 ```
+
+And that's it!
