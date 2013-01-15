@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 
+import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
@@ -239,12 +240,35 @@ public class AnnotationHandlerTest {
 
       final AnnotationHandler sut = spy(new AnnotationHandler());
       doReturn(new ModelAndView()).when(sut).handleException(mockAnnotation, expectedException, mockResponse);
-      doReturn(expectedException).when(sut).getAnnotatedException(expectedException, expectedException.getCause());
       doReturn(mockAnnotation).when(sut).getAnnotationFrom(expectedException);
 
       final ModelAndView view = sut.resolveException(null, mockResponse, null, expectedException);
 
       verify(sut).handleException(mockAnnotation, expectedException, mockResponse);
+   }
+
+   @Test public void getMessageException_ShouldReturnHandledException_WhenUseMessageExceptionIsTrue() throws Exception {
+      final TestExceptionWithNoAnnotationAttributes expectedException = new TestExceptionWithNoAnnotationAttributes("");
+      final TestExceptionWithNotFoundStatusCode thrownException = new TestExceptionWithNotFoundStatusCode();
+
+      final AnnotationHandler sut = spy(new AnnotationHandler());
+      sut.setUseHandledExceptionMessage(true);
+
+      Exception messageException = sut.getMessageException(thrownException, expectedException);
+
+      assertEquals(expectedException, messageException);
+   }
+
+   @Test public void getMessageException_ShouldReturnThrownException_WhenUseMessageExceptionIsFalse() throws Exception {
+      final TestExceptionWithXmlContentType annotatedException = new TestExceptionWithXmlContentType();
+      final TestExceptionWithNoAnnotation expectedException = new TestExceptionWithNoAnnotation("");
+
+      final AnnotationHandler sut = spy(new AnnotationHandler());
+      sut.setUseHandledExceptionMessage(false);
+
+      Exception messageException = sut.getMessageException(expectedException, annotatedException);
+
+      assertEquals(expectedException, messageException);
    }
 
    @Test public void resolveException_ShouldReturnDefaultErrorMessage_WhenUncheckedExceptionIsGiven() throws Exception {
@@ -263,7 +287,7 @@ public class AnnotationHandlerTest {
       verify(sut).respondWithDefault(expectedException, mockResponse);
    }
 
-   @Test public void getAnnotatedException_ShouldReturnOutermostAnnotatedException_WhenThereAreCheckedExceptionsChained() throws Exception {
+   @Test public void getAnnotatedException_ShouldReturnOutermostAnnotatedException_WhenThereAreCheckedExceptionsChainedAndGetCauseIsTrue() throws Exception {
       TestExceptionWithNoAnnotationAttributes mockException = mock(TestExceptionWithNoAnnotationAttributes.class);
       doReturn(new TestExceptionWithXmlContentType()).when(mockException).getCause();
 
@@ -279,7 +303,23 @@ public class AnnotationHandlerTest {
       Assert.assertTrue(sut.getAnnotatedException(mockException,mockException.getCause()) instanceof TestExceptionWithNoAnnotationAttributes);
    }
 
-   @Test public void getAnnotatedException_ShouldReturnFirstChainedAnnotatedException_WhenThrownExceptionIsUnannotated() throws Exception {
+   @Test public void getHandledException_ShouldReturnThrownException_WhenThereAreCheckedExceptionsChainedAndGetCauseIsFalse() throws Exception {
+      TestExceptionWithNoAnnotationAttributes mockException = mock(TestExceptionWithNoAnnotationAttributes.class);
+      doReturn(new TestExceptionWithXmlContentType()).when(mockException).getCause();
+
+      final ExceptionHandler mockAnnotation = mock(ExceptionHandler.class);
+      final HttpServletResponse mockResponse = mock(HttpServletResponse.class);
+
+      final AnnotationHandler sut = spy(new AnnotationHandler());
+      when(sut.getAnnotationFrom(mockException)).thenReturn(mockAnnotation);
+      doReturn(new ModelAndView()).when(sut).handleException(mockAnnotation, mockException, mockResponse);
+
+      final ModelAndView view = sut.resolveException(null, mockResponse, null, mockException);
+
+      Assert.assertTrue(sut.getAnnotatedException(mockException,mockException.getCause()) instanceof TestExceptionWithNoAnnotationAttributes);
+   }
+
+   @Test public void getHandledException_ShouldReturnFirstChainedAnnotatedException_WhenThrownExceptionIsUnannotatedAndGetCauseIsTrue() throws Exception {
       TestExceptionWithNoAnnotation mockException = mock(TestExceptionWithNoAnnotation.class);
       TestExceptionWithNoAnnotationAttributes expectedException = new TestExceptionWithNoAnnotationAttributes("");
       doReturn(expectedException).when(mockException).getCause();
@@ -291,9 +331,17 @@ public class AnnotationHandlerTest {
       when(sut.getAnnotationFrom(expectedException)).thenReturn(mockAnnotation);
       doReturn(new ModelAndView()).when(sut).handleException(mockAnnotation, expectedException, mockResponse);
 
-      final ModelAndView view = sut.resolveException(null, mockResponse, null, expectedException);
+      Assert.assertTrue(sut.getHandledException(mockException) instanceof TestExceptionWithNoAnnotationAttributes);
+   }
 
-      Assert.assertTrue(sut.getAnnotatedException(mockException,mockException.getCause()) instanceof TestExceptionWithNoAnnotationAttributes);
+   @Test public void getHandledException_ShouldReturnThrownException_WhenThrownExceptionIsUnannotatedAndGetCauseIsFalse() throws Exception {
+      TestExceptionWithNoAnnotation expectedException = new TestExceptionWithNoAnnotation("");
+
+      final AnnotationHandler sut = new AnnotationHandler();
+      sut.setUseGetCause(false);
+      Exception actualException = sut.getHandledException(expectedException);
+
+      Assert.assertTrue(actualException instanceof TestExceptionWithNoAnnotation);
    }
 }
 
