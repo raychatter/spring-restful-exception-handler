@@ -47,6 +47,12 @@ public class MyCustomException extends Exception {
 }
 ```
 
-### Note:
+### Bean Properties:
 
-If an unannotated exception is thrown, the spring-restful-exception-handler will call `getCause()` on the exception until the first annotated exception is found. Provided there is no annotated exception, the default httpStatus and contentType will be used.
+There are two boolean properties that can be set within the spring-restful-exception-handler bean:
+
+`useGetCause`
+If an unannotated exception is thrown, the spring-restful-exception-handler will call `getCause()` on the exception until the first annotated exception is found. Provided there is no annotated exception or `useGetcause` is set to false, the default httpStatus and contentType will be used with the thrown exception.
+
+`useHandledExceptionMessage`
+Sometimes it is useful to give the user a "higher level" exception response message than the one associated with the handled (annotated) exception. When `useHandledExceptionMessage` is true (which is the default setting), the message returned will be that from the annotated exception. If this property or `useGetCause` is set to false or there is no annotated exception, the message used will be from the thrown exception.
