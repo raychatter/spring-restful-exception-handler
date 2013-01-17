@@ -279,7 +279,7 @@ public class AnnotationHandlerTest {
       when(mockResponse.getWriter()).thenReturn(mockPrinter);
 
       final AnnotationHandler sut = spy(new AnnotationHandler());
-      when(sut.getAnnotatedException(expectedException, expectedException.getCause())).thenReturn(expectedException);
+      when(sut.getAnnotatedException(expectedException)).thenReturn(expectedException);
       when(sut.getAnnotationFrom(expectedException)).thenReturn(null);
 
       final ModelAndView view = sut.resolveException(null, mockResponse, null, expectedException);
@@ -300,7 +300,7 @@ public class AnnotationHandlerTest {
 
       final ModelAndView view = sut.resolveException(null, mockResponse, null, mockException);
 
-      Assert.assertTrue(sut.getAnnotatedException(mockException,mockException.getCause()) instanceof TestExceptionWithNoAnnotationAttributes);
+      Assert.assertTrue(sut.getAnnotatedException(mockException) instanceof TestExceptionWithNoAnnotationAttributes);
    }
 
    @Test public void getHandledException_ShouldReturnThrownException_WhenThereAreCheckedExceptionsChainedAndGetCauseIsFalse() throws Exception {
@@ -316,7 +316,7 @@ public class AnnotationHandlerTest {
 
       final ModelAndView view = sut.resolveException(null, mockResponse, null, mockException);
 
-      Assert.assertTrue(sut.getAnnotatedException(mockException,mockException.getCause()) instanceof TestExceptionWithNoAnnotationAttributes);
+      Assert.assertTrue(sut.getAnnotatedException(mockException) instanceof TestExceptionWithNoAnnotationAttributes);
    }
 
    @Test public void getHandledException_ShouldReturnFirstChainedAnnotatedException_WhenThrownExceptionIsUnannotatedAndGetCauseIsTrue() throws Exception {

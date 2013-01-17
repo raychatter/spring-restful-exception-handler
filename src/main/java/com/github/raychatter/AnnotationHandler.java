@@ -18,6 +18,8 @@ public class AnnotationHandler implements HandlerExceptionResolver {
    protected static final String USER_TEMPLATE = "error.template";
    protected static final String DEFAULT_TEMPLATE = "defaults/default.template";
    private static final String UTF_8 = "UTF-8";
+   private static final String DEFAULT_CONTENT_TYPE = MediaType.APPLICATION_XML_VALUE;
+   private static final int DEFAULT_STATUS_CODE = HttpStatus.INTERNAL_SERVER_ERROR.value();
    private boolean useHandledExceptionMessage = true; //use the message from the annotated exception
    private boolean useGetCause = true;
 
@@ -34,8 +36,6 @@ public class AnnotationHandler implements HandlerExceptionResolver {
       final Exception handledException = getHandledException(thrownException);
       final ExceptionHandler annotation = getAnnotationFrom(handledException);
       final Exception messageException = getMessageException(thrownException, handledException);
-//      final StackTraceElement[] testStacktrace =  handledException.getStackTrace();
-//      final List<Throwable> throwableList = ExceptionUtils.getThrowableList(thrownException);
 
       try {
          if (annotation == null) {
@@ -54,7 +54,7 @@ public class AnnotationHandler implements HandlerExceptionResolver {
 
    protected Exception getHandledException(final Exception thrownException) {
       if(useGetCause) {
-         return getAnnotatedException(thrownException, thrownException.getCause());
+         return getAnnotatedException(thrownException);
       }
       return thrownException;
    }
@@ -82,18 +82,19 @@ public class AnnotationHandler implements HandlerExceptionResolver {
    }
 
    protected ModelAndView respondWithDefault(final Exception handledException, final HttpServletResponse response) throws IOException {
-      response.setContentType(MediaType.APPLICATION_XML_VALUE);
-      response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+      response.setContentType(DEFAULT_CONTENT_TYPE);
+      response.setStatus(DEFAULT_STATUS_CODE);
       response.getWriter().write(formatDefaultMessage(handledException));
 
       return new ModelAndView();
    }
 
-   protected Exception getAnnotatedException(Exception exception, Throwable causedException) {
+   protected Exception getAnnotatedException(Exception exception) {
+      Throwable causedException = exception.getCause();
       if(getAnnotationFrom(exception) != null || causedException == null) {
          return exception;
       } else {
-         return getAnnotatedException((Exception) causedException, causedException.getCause());
+         return getAnnotatedException((Exception) causedException);
       }
    }
 
