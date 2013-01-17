@@ -34,6 +34,8 @@ public class AnnotationHandler implements HandlerExceptionResolver {
       final Exception handledException = getHandledException(thrownException);
       final ExceptionHandler annotation = getAnnotationFrom(handledException);
       final Exception messageException = getMessageException(thrownException, handledException);
+//      final StackTraceElement[] testStacktrace =  handledException.getStackTrace();
+//      final List<Throwable> throwableList = ExceptionUtils.getThrowableList(thrownException);
 
       try {
          if (annotation == null) {
